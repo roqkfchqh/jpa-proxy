@@ -27,11 +27,20 @@ public class TransactionService {
     public void outer(String name){
         TransactionLogger.logTransactionInfo("\uD83D\uDFE2 outer 시작");
         TransactionLogger.logTransactionLifecycle("outer 트랜잭션");
-        for(int i = 0; i < 10; i++){
-            otherComponent.inner(name + i);
-            inner(name + i);
-            if(i == 5) throw new RuntimeException("exception");
+        try {
+            for(int i = 0; i < 10; i++){
+                otherComponent.inner(name + i);
+                inner(name + i);
+                if(i == 5) throw new RuntimeException("exception");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
+//        for(int i = 0; i < 10; i++){
+//            otherComponent.inner(name + i);
+//            inner(name + i);
+//            if(i == 5) throw new RuntimeException("exception");
+//        }
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
